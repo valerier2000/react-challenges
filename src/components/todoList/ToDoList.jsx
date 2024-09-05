@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import ToDoItem from "./ToDoItem";
 
 function ToDoList() {
   const [inputTask, setInputTask] = useState("");
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(
+    JSON.parse(localStorage.getItem("tasks")) || []
+  );
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -18,6 +24,7 @@ function ToDoList() {
     };
 
     setTasks([...tasks, newTask]);
+
     setInputTask("");
   }
 
