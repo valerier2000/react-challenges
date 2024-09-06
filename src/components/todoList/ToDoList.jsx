@@ -9,7 +9,8 @@ function ToDoList() {
   );
 
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    if (tasks.length > 0) localStorage.setItem("tasks", JSON.stringify(tasks));
+    else localStorage.removeItem("tasks");
   }, [tasks]);
 
   function handleSubmit(e) {
@@ -30,6 +31,10 @@ function ToDoList() {
 
   function handleChange(e) {
     setInputTask(e.target.value);
+  }
+
+  function handleDeleteAllTasks() {
+    setTasks([]);
   }
 
   function handleDelete(taskId) {
@@ -56,6 +61,8 @@ function ToDoList() {
         />
         <button type="submit">Add task</button>
       </form>
+
+      <button onClick={handleDeleteAllTasks}>Delete all tasks</button>
 
       <ul>
         {tasks.map((task) => {
