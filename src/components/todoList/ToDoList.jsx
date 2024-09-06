@@ -1,17 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import ToDoItem from "./ToDoItem";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 function ToDoList() {
   const [inputTask, setInputTask] = useState("");
-  const [tasks, setTasks] = useState(
-    JSON.parse(localStorage.getItem("tasks")) || []
-  );
-
-  useEffect(() => {
-    if (tasks.length > 0) localStorage.setItem("tasks", JSON.stringify(tasks));
-    else localStorage.removeItem("tasks");
-  }, [tasks]);
+  const [tasks, setTasks] = useLocalStorage("tasks", []);
 
   function handleSubmit(e) {
     e.preventDefault();
