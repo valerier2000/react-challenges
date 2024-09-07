@@ -6,6 +6,7 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 function ToDoList() {
   const [inputTask, setInputTask] = useState("");
   const [tasks, setTasks] = useLocalStorage("tasks", []);
+  const [editingTaskId, setEditingTaskId] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -29,6 +30,10 @@ function ToDoList() {
 
   function handleDeleteAllTasks() {
     setTasks([]);
+  }
+
+  function handleEdit(taskId) {
+    setEditingTaskId((prevTaskId) => (prevTaskId === taskId ? null : taskId));
   }
 
   function handleDelete(taskId) {
@@ -64,8 +69,10 @@ function ToDoList() {
             <ToDoItem
               task={task}
               key={task.id}
+              onEdit={() => handleEdit(task.id)}
               onChange={() => handleToggleCompleted(task.id)}
               onDelete={() => handleDelete(task.id)}
+              editingTaskId={editingTaskId}
             />
           );
         })}
