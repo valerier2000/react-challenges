@@ -1,4 +1,13 @@
-function ToDoItem({ task, onChange, onEdit, onDelete, editingTaskId }) {
+function ToDoItem({
+  task,
+  onChange,
+  onEditClick,
+  onDelete,
+  editingTaskId,
+  onUpdate,
+  onEdit,
+  editInput,
+}) {
   return (
     <li>
       {editingTaskId !== task.id ? (
@@ -17,13 +26,18 @@ function ToDoItem({ task, onChange, onEdit, onDelete, editingTaskId }) {
           >
             {task.name}
           </label>
+
+          <button onClick={onEditClick}>Edit</button>
+          <button onClick={onDelete}>Delete</button>
         </>
       ) : (
-        <input type="text" />
+        <>
+          <form onSubmit={onUpdate}>
+            <input type="text" value={editInput} onChange={onEdit} />
+            <button type="submit">Update</button>
+          </form>
+        </>
       )}
-
-      <button onClick={onEdit}>Edit</button>
-      <button onClick={onDelete}>Delete</button>
     </li>
   );
 }

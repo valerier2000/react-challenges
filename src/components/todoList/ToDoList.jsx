@@ -7,6 +7,7 @@ function ToDoList() {
   const [inputTask, setInputTask] = useState("");
   const [tasks, setTasks] = useLocalStorage("tasks", []);
   const [editingTaskId, setEditingTaskId] = useState("");
+  const [editInput, setEditInput] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -32,8 +33,28 @@ function ToDoList() {
     setTasks([]);
   }
 
-  function handleEdit(taskId) {
+  function handleEditClick(taskId, taskName) {
     setEditingTaskId((prevTaskId) => (prevTaskId === taskId ? null : taskId));
+    setEditInput(taskName);
+  }
+
+  function handleEdit(e) {
+    setEditInput(e.target.value);
+  }
+
+  function handleUpdate(e, taskId) {
+    e.preventDefault();
+
+    if (editInput.trim() === "") return;
+
+    setTasks(
+      tasks.map((task) =>
+        task.id === taskId ? { ...task, name: editInput } : task
+      )
+    );
+
+    setEditingTaskId(null);
+    setEditInput("");
   }
 
   function handleDelete(taskId) {
@@ -69,10 +90,13 @@ function ToDoList() {
             <ToDoItem
               task={task}
               key={task.id}
-              onEdit={() => handleEdit(task.id)}
+              onEditClick={() => handleEditClick(task.id, task.name)}
               onChange={() => handleToggleCompleted(task.id)}
               onDelete={() => handleDelete(task.id)}
               editingTaskId={editingTaskId}
+              onUpdate={(e) => handleUpdate(e, task.id)}
+              onEdit={handleEdit}
+              editInput={editInput}
             />
           );
         })}
